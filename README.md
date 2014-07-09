@@ -8,6 +8,10 @@ You can find it at : https://github.com/hybridauth/hybridauth.
 
 See https://github.com/binarysec/owfCore for OpenWF.
 
+## Support
+
+It currently only support Facebook login. (07/09/2014)
+
 # Integration
 
 ## This is the hybridauth section which should be added to your .ini file
@@ -34,7 +38,7 @@ $js = hybrid->get_login_tpl();
 /* make a template and add this */
 $tpl = new core_tpl($this->wf);
 $tpl->set("hybridauth", array('tpl' => $js, 'config' => $config));
-$tpl->fetch("myProject/login");
+echo $tpl->fetch("myProject/login");
 ```
 
 ## How to, inside a template file :
