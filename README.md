@@ -69,8 +69,13 @@ echo $tpl->fetch("myProject/login");
 	data-clientId="%{$hybridauth['config']['providers']['Google']['keys']['id']}%"
 	data-callback="onSignInCallback"
 	data-theme="dark"
-	data-cookiepolicy="single_host_origin">
+	data-cookiepolicy="single_host_origin"></button>
 %{/if}%
+
+%{if isset($hybridauth['config']['providers']['LinkedIn'])}%
+	<script type="IN/Login"></script>
+%{/if}%
+
 ```
 
 ### Javascript API provided :
@@ -89,3 +94,6 @@ See first step of this link : https://developers.google.com/+/quickstart/javascr
 Then don't forget to add APIs "Contacts API" and "Google+ API" in your project.
 
 More help : http://hybridauth.sourceforge.net/userguide/IDProvider_info_Google.html
+
+### LinkedIn
+See http://hybridauth.sourceforge.net/userguide/IDProvider_info_LinkedIn.html
