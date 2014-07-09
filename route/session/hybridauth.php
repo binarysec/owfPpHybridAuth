@@ -7,10 +7,12 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 		$this->a_session = $this->wf->session();
 		$this->lang = $this->wf->core_lang()->get_context("tpl/hybridauth/login");
 		$this->hybrid = $this->wf->hybridauth();
+		$this->ts();
 	}
 	
 	private function ts($text = "") {
 		$ret = array(
+			"API not supported" => $this->lang->ts("API not supported"),
 			"You don't have any email address associated with this account" => $this->lang->ts("You don't have any email address associated with this account"),
 			"Error creating your account" => $this->lang->ts("Error creating your account"),
 		);
@@ -23,8 +25,11 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 		
 		/* instanciate hybridauth lib */
 		$hybridauth = new Hybrid_Auth($this->hybrid->config);
-		// should do more than facebook
-		$adapter = $hybridauth->authenticate("Facebook");
+		$api = $this->wf->get_var("owfha_api");
+		$apiname = $this->hybrid->get_supported_providers($api);
+		if(is_array($apiname))
+			$this->wf->display_error(500, $this->ts("API not supported"));
+		$adapter = $hybridauth->authenticate($apiname);
 		$user_profile = $adapter->getUserProfile(); 
 		
 		/* get the user email */
@@ -72,37 +77,7 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 	
 }
 
-
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 //*
-	 //* Hybrid login
-	 //*
-	 //* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	//public function loginhybrid() {
-		
-		//$this->wf->hybridauth();
-		
-		//// todo : change the site domain with the core_pref
-		//// add hybridauth as required in modules
-		//// add app id and secrets somewhere else
-		//$config = array(
-			//"base_url" => "http://bo.slowcontrol.com/hybridauth/",
-			//"providers" => array (
-				//"Facebook" => array (
-					//"enabled" => true,
-					//"keys" => array("id" => "1445212719078904", "secret" => "68b52cb3578601d4ecf73be20eb4881a"),
-					//"scope" => "email, user_about_me, user_birthday, user_hometown", // optional
-					//"display" => "popup" // optional
-				//)
-			//)
-		//);
-		//$hybridauth = new Hybrid_Auth($config);
-		//$adapter = $hybridauth->authenticate("Facebook");
-		//$user_profile = $adapter->getUserProfile(); 
-		
-		//object(Hybrid_User_Profile)#66 (24) {
+//object(Hybrid_User_Profile)#66 (24) {
 //["identifier"]=> string(17) "10152508393079337" 
 //["webSiteURL"]=> string(61) "Breath of War (carte Warcraft III) : http://bow.belboudou.com" 
 //["profileURL"]=> string(62) "https://www.facebook.com/app_scoped_user_id/10152508393079337/" 

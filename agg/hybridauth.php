@@ -6,9 +6,15 @@ class hybridauth extends wf_agg {
 	public $config = array("providers" => array());
 	public $providers = array(
 		"Facebook" => array(
-			"scope" => "email, user_about_me, user_birthday, user_hometown", // optional
-			"display" => "popup" // optional
-		)
+			/* optionals */
+			"scope" => "public_profile,email",
+			//email,user_about_me,user_birthday,user_hometown
+			"display" => "popup"
+		),
+		"Google" => array(
+			/* optional */
+			"scope" => "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+		),
 	);
 	
 	public function loader() {
@@ -67,4 +73,11 @@ class hybridauth extends wf_agg {
 		return("E".$this->wf->hash($s1).$this->wf->hash($s2));
 	}
 	
+	public function get_supported_providers($r = "") {
+		$ret = array(
+			"fb" => "Facebook",
+			"gplus" => "Google",
+		);
+		return isset($ret[$r]) ? $ret[$r] : $ret;
+	}
 }
