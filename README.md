@@ -12,7 +12,7 @@ It requires the session module to work. See https://github.com/binarysec/owfSess
 
 ## Support
 
-It currently only support Facebook and Google login. (07/09/2014)
+It currently only support Facebook, Google and LinkedIn login. (07/09/2014)
 
 # Integration
 
