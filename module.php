@@ -14,7 +14,29 @@ class wfm_ppHybridauth extends wf_module {
 	
 	public function get_actions() {
 		return(array(
+			"/hybridauth" => array(
+				WF_ROUTE_REDIRECT,
+				"/hybridauth/index.php",
+				"",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
+			"/hybridauth/index.php" => array(
+				WF_ROUTE_ACTION,
+				"hybridauth/index",
+				"index",
+				"",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
+			"/session/hybridauth" => array(
+				WF_ROUTE_ACTION,
+				"session/hybridauth",
+				"login",
+				"",
+				WF_ROUTE_HIDE,
+				array("session:ranon")
+			),
 		));
 	}
-	
 }
