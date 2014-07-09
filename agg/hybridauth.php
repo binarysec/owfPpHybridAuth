@@ -51,4 +51,20 @@ class hybridauth extends wf_agg {
 		return $tpl->fetch('hybridauth/login');
 	}
 	
+	public function add_user($email, $user_profile) {
+		$ret = $this->wf->execute_hook("hybridauth_adduser");
+		$ret = end($ret);
+		
+		if(!is_callable($ret))
+			throw new wf_exception("hybridauth_adduser hook does not return a callable");
+		
+		return $ret($email, $user_profile);
+	}
+	
+	public function generate_session_id() {
+		$s1 = $this->wf->get_rand();
+		$s2 = $this->wf->get_rand();
+		return("E".$this->wf->hash($s1).$this->wf->hash($s2));
+	}
+	
 }
