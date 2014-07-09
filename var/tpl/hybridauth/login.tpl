@@ -19,7 +19,10 @@
 			$(location).attr('href', "%{link '/session/hybridauth'}%?owfha_api="+api);
 		};
 		
-		hybridauth.login = { 'fb': notLoaded, 'gplus': notLoaded };
+		hybridauth.login = {
+			'fb': notLoaded,
+			'gplus': notLoaded
+		};
 		
 		%{if isset($config["providers"]["Facebook"])}%
 		/* * * * * * * * * * * * * * * * * * * *
@@ -67,8 +70,6 @@
 				}
 				
 			})(hybridauth.fb);
-			
-			hybridauth.fb.init(document, 'script', 'facebook-jssdk');
 		%{/if}%
 		
 		%{if isset($config["providers"]["Google"])}%
@@ -87,9 +88,11 @@
 							redirect('gplus');
 						}
 						else if(authResult['error']) {
-							// There was an error, which means the user is not signed in.
-							// As an example, you can handle by writing to the console:
-							message('Google login : There was an error: ' + authResult['error'])
+							if(authResult['error_subtype'] == "origin_mismatch") {
+								message('Google login error : wrong origin URL', 'warning')
+							}
+							else
+								message('Google login : There was an error: ' + authResult['error'], 'danger')
 						}
 						console.log('authResult', authResult);
 					});
@@ -105,17 +108,53 @@
 				};
 				
 			})(hybridauth.gplus);
-			
-			hybridauth.gplus.init();
 		%{/if}%
-		w.onSignInCallback = hybridauth.gplus.onSignInCallback;
 		
+		%{if isset($config["providers"]["LinkedIn"])}%
+		/* * * * * * * * * * * * * * * * * * * *
+		 * owfHybridauth
+		 * -> LinkedIn
+		 * * * * * * * * * * * * * * * * * * * */
+			hybridauth.li = {};
+			
+			(function(li) {
+				/* Load the LinkedIn scripts asynchronously */
+				li.init = function() {
+					$.getScript("http://platform.linkedin.com/in.js?async=true", function success() {
+						IN.init({
+							onLoad: "onLinkedInLoad",
+							api_key: '%{$config["providers"]["LinkedIn"]["keys"]["id"]}%'
+						});
+					});
+				};
+				li.onLoad = function() {
+					//IN.Event.onOnce(IN, "auth", function() {
+						//redirect('li');
+					//}, callbackScope, extraData)
+					IN.Event.onOnce(IN, "auth", function() {
+						redirect('li');
+					});
+				}
+				
+			})(hybridauth.li);
+		
+		%{/if}%
 	})(this);
+	
+	$(document).ready(function() {
+		%{if isset($config["providers"]["Facebook"])}%
+			hybridauth.fb.init(document, 'script', 'facebook-jssdk');
+		%{/if}%
+		%{if isset($config["providers"]["Google"])}%
+			hybridauth.gplus.init();
+			onSignInCallback = hybridauth.gplus.onSignInCallback;
+		%{/if}%
+		%{if isset($config["providers"]["LinkedIn"])}%
+			hybridauth.li.init();
+			onLinkedInLoad = hybridauth.li.onLoad;
+		%{/if}%
+	});
 </script>
-
-
-
-
 
 <!--
 <script type="text/javascript">

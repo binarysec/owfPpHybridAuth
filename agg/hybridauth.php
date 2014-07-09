@@ -15,6 +15,7 @@ class hybridauth extends wf_agg {
 			/* optional */
 			"scope" => "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
 		),
+		"LinkedIn" => array(),
 	);
 	
 	public function loader() {
@@ -30,7 +31,7 @@ class hybridauth extends wf_agg {
 			if(isset($ini[$p."_id"], $ini[$p."_secret"])) {
 				$this->config["providers"][$p] = array(
 					"enabled" => true,
-					"keys" => array("id" => $ini[$p."_id"], "secret" => $ini[$p."_secret"])
+					"keys" => array("id" => $ini[$p."_id"], "key" => $ini[$p."_id"], "secret" => $ini[$p."_secret"])
 				);
 				if(isset($data["scope"]))
 					$this->config["providers"][$p]["scope"] = $data["scope"];
@@ -42,6 +43,7 @@ class hybridauth extends wf_agg {
 		/* load the library */
 		$this->lib_dir = dirname($this->wf->locate_file('deps/hybridauth/Hybrid/Auth.php'));
 		$this->require_lib("Auth.php");
+		$this->require_lib("thirdparty/OAuth/OAuth.php");
 		Hybrid_Auth::initialize($this->config);
 		//$logger = "$dir/Logger.php";
 		//require_once($logger);
@@ -77,6 +79,7 @@ class hybridauth extends wf_agg {
 		$ret = array(
 			"fb" => "Facebook",
 			"gplus" => "Google",
+			"li" => "LinkedIn",
 		);
 		return isset($ret[$r]) ? $ret[$r] : $ret;
 	}
