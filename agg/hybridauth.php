@@ -9,13 +9,14 @@ class hybridauth extends wf_agg {
 			/* optionals */
 			"scope" => "public_profile,email",
 			//email,user_about_me,user_birthday,user_hometown
-			"display" => "popup"
+			//"display" => "popup"
 		),
 		"Google" => array(
 			/* optional */
 			"scope" => "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
 		),
 		"LinkedIn" => array(),
+		"Twitter" => array (),
 	);
 	
 	public function loader() {
@@ -80,6 +81,7 @@ class hybridauth extends wf_agg {
 			"fb" => "Facebook",
 			"gplus" => "Google",
 			"li" => "LinkedIn",
+			//"tw" => "Twitter",
 		);
 		return isset($ret[$r]) ? $ret[$r] : $ret;
 	}
