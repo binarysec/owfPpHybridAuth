@@ -1,4 +1,4 @@
-# owfHybridauth
+# owfPpHybridAuth
 
 This is a module of the Open Web Framework.
 
@@ -27,7 +27,7 @@ Google_id = ...
 Google_secret = ...
 ....
 ```
-We will see later how to get credentials : https://github.com/Lazarus974/owfHybridauth#how-to-get-credentials
+We will see later how to get credentials : https://github.com/binarysec/owfPpHybridAuth#how-to-get-credentials
 
 ### API provided with this module :
 ```php
