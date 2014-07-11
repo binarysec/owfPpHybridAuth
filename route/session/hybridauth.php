@@ -15,6 +15,7 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 			"API not supported" => $this->lang->ts("API not supported"),
 			"You don't have any email address associated with this account" => $this->lang->ts("You don't have any email address associated with this account"),
 			"Error creating your account" => $this->lang->ts("Error creating your account"),
+			"Authentication failed" => $this->lang->ts("Authentication failed"),
 		);
 		if(!$text)
 			return false;
@@ -28,9 +29,9 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 		$api = $this->wf->get_var("owfha_api");
 		$apiname = $this->hybrid->get_supported_providers($api);
 		if(is_array($apiname))
-			$this->wf->display_error(500, $this->ts("API not supported"));
+			$this->wf->display_error(500, $this->ts("API not supported"), true);
 		$adapter = $hybridauth->authenticate($apiname);
-		$user_profile = $adapter->getUserProfile(); 
+		$user_profile = $adapter->getUserProfile();
 		
 		/* get the user email */
 		$email = $user_profile->emailVerified;
@@ -38,7 +39,7 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 			$email = $user_profile->email;
 		}
 		if(!$email) {
-			$this->wf->display_error(500, $this->ts("You don't have any email address associated with this account"));
+			$this->wf->display_error(500, $this->ts("You don't have any email address associated with this account"), true);
 		}
 		
 		/* check if user exists */
@@ -49,7 +50,7 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 			$user = current($this->a_session->user->get(array("id" => $uid)));
 			
 			if(!$user)
-				$this->wf->display_error(500, $this->ts("Error creating your account"));
+				$this->wf->display_error(500, $this->ts("Error creating your account"), true);
 		}
 		
 		/* login user */

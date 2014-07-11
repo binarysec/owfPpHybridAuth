@@ -9,7 +9,7 @@ class hybridauth extends wf_agg {
 			/* optionals */
 			"scope" => "public_profile,email",
 			//email,user_about_me,user_birthday,user_hometown
-			//"display" => "popup"
+			"display" => "popup"
 		),
 		"Google" => array(
 			/* optional */
@@ -45,9 +45,16 @@ class hybridauth extends wf_agg {
 		$this->lib_dir = dirname($this->wf->locate_file('deps/hybridauth/Hybrid/Auth.php'));
 		$this->require_lib("Auth.php");
 		$this->require_lib("thirdparty/OAuth/OAuth.php");
-		Hybrid_Auth::initialize($this->config);
 		//$logger = "$dir/Logger.php";
 		//require_once($logger);
+		
+		/* try to authenticate */
+		try {
+			Hybrid_Auth::initialize($this->config);
+		}
+		catch(Exception $e) {
+			$this->wf->display_error(400, $e->getMessage(), true);
+		}
 	}
 	
 	public function require_lib($fname) {
@@ -81,7 +88,7 @@ class hybridauth extends wf_agg {
 			"fb" => "Facebook",
 			"gplus" => "Google",
 			"li" => "LinkedIn",
-			//"tw" => "Twitter",
+			"tw" => "Twitter",
 		);
 		return isset($ret[$r]) ? $ret[$r] : $ret;
 	}

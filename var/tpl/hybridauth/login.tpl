@@ -24,7 +24,7 @@
 			'gplus': notLoaded
 		};
 		
-		%{if isset($config["providers"]["Facebook"])}%
+		%{if isset($config["providers"]["Facebook"]) && !isset($config["providers"]["Facebook"]["noscript"])}%
 		/* * * * * * * * * * * * * * * * * * * *
 		 * owfHybridauth
 		 * -> Facebook
@@ -72,7 +72,7 @@
 			})(hybridauth.fb);
 		%{/if}%
 		
-		%{if isset($config["providers"]["Google"])}%
+		%{if isset($config["providers"]["Google"]) && !isset($config["providers"]["Google"]["noscript"])}%
 		/* * * * * * * * * * * * * * * * * * * *
 		 * owfHybridauth
 		 * -> Google
@@ -110,7 +110,7 @@
 			})(hybridauth.gplus);
 		%{/if}%
 		
-		%{if isset($config["providers"]["LinkedIn"])}%
+		%{if isset($config["providers"]["LinkedIn"]) && !isset($config["providers"]["LinkedIn"]["noscript"])}%
 		/* * * * * * * * * * * * * * * * * * * *
 		 * owfHybridauth
 		 * -> LinkedIn
@@ -142,14 +142,14 @@
 	})(this);
 	
 	$(document).ready(function() {
-		%{if isset($config["providers"]["Facebook"])}%
+		%{if isset($config["providers"]["Facebook"]) && !isset($config["providers"]["Facebook"]["noscript"])}%
 			hybridauth.fb.init(document, 'script', 'facebook-jssdk');
 		%{/if}%
-		%{if isset($config["providers"]["Google"])}%
+		%{if isset($config["providers"]["Google"]) && !isset($config["providers"]["Google"]["noscript"])}%
 			hybridauth.gplus.init();
 			onSignInCallback = hybridauth.gplus.onSignInCallback;
 		%{/if}%
-		%{if isset($config["providers"]["LinkedIn"])}%
+		%{if isset($config["providers"]["LinkedIn"]) && !isset($config["providers"]["LinkedIn"]["noscript"])}%
 			hybridauth.li.init();
 			onLinkedInLoad = hybridauth.li.onLoad;
 		%{/if}%
