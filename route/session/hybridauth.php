@@ -24,14 +24,8 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 	
 	public function login() {
 		
-		/* instanciate hybridauth lib */
-		$hybridauth = new Hybrid_Auth($this->hybrid->config);
-		$api = $this->wf->get_var("owfha_api");
-		$apiname = $this->hybrid->get_supported_providers($api);
-		if(is_array($apiname))
-			$this->wf->display_error(500, $this->ts("API not supported"), true);
-		$adapter = $hybridauth->authenticate($apiname);
-		$user_profile = $adapter->getUserProfile();
+		/* authenticate */
+		$user_profile = $this->hybrid->auth();
 		
 		/* get the user email */
 		$email = $user_profile->emailVerified;
@@ -39,7 +33,9 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 			$email = $user_profile->email;
 		}
 		if(!$email) {
-			$this->wf->display_error(500, $this->ts("You don't have any email address associated with this account"), true);
+			//$this->wf->display_error(500, $this->ts("You don't have any email address associated with this account"), true);
+			$this->wf->display_login($this->ts("You don't have any email address associated with this account"));
+			exit(0);
 		}
 		
 		/* check if user exists */
@@ -66,6 +62,9 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 			$sessid,
 			time() + $this->a_session->session_timeout
 		);
+		
+		/* save hybridauth session */
+		$this->hybrid->save();
 		
 		/* redirect */
 		$redirect_url = $this->wf->linker('/');
