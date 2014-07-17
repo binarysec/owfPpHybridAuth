@@ -37,12 +37,11 @@ class hybridauth extends wf_agg {
 	public $providers = array(
 		"Facebook" => array(
 			/* optionals */
-			"scope" => "public_profile,email,user_friends",
+			"scope" => "public_profile,email",
 			//email,user_about_me,user_birthday,user_hometown
 			"display" => "popup"
 		),
 		"Google" => array(
-			/* optional */
 			"scope" => "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
 		),
 		"LinkedIn" => array(),
@@ -119,7 +118,10 @@ class hybridauth extends wf_agg {
 					"enabled" => true,
 					"keys" => array("id" => $ini[$p."_id"], "key" => $ini[$p."_id"], "secret" => $ini[$p."_secret"])
 				);
-				if(isset($data["scope"]))
+				
+				if(isset($ini[$p."_scope"]))
+					$this->config["providers"][$p]["scope"] = $ini[$p."_scope"];
+				elseif(isset($data["scope"]))
 					$this->config["providers"][$p]["scope"] = $data["scope"];
 				if(isset($data["display"]))
 					$this->config["providers"][$p]["display"] = $data["display"];

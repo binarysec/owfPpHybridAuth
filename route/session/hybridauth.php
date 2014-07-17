@@ -84,8 +84,6 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 //["photoURL"]=> string(73) "https://graph.facebook.com/10152508393079337/picture?width=150&height=150" 
 //["displayName"]=> string(16) "Olivier Leclercq" 
 //["description"]=> string(0) "" 
-//["gender"]=> string(4) "male" 
-//["language"]=> NULL 
 //["region"]=> string(0) "" 
 //["city"]=> NULL 
 //["username"]=> string(0) "" 
