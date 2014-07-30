@@ -24,6 +24,8 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 	
 	public function login() {
 		
+		$back = $this->wf->core_cipher()->get_var("back");
+		
 		/* authenticate */
 		$user_profile = $this->hybrid->auth();
 		
@@ -71,6 +73,7 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 		if(isset($uid))
 			// redirect url should be editable
 			$redirect_url = $this->wf->linker('/account/secure');
+		$redirect_url = $back ? $back : $redirect_url;
 		
 		$this->wf->redirector($redirect_url);
 	}

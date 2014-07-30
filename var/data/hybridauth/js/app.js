@@ -55,12 +55,10 @@
 				
 				var checkStatus = function() {
 					FB.getLoginStatus(function(response) {
-						console.debug(response);
 						if(response.status === 'connected') {
 							FB.api("/me/friends", function (response) {
-								console.debug(response);
 								if(response && !response.error) {
-									console.debug(response);
+									//console.debug(response);
 								}
 							});
 						}

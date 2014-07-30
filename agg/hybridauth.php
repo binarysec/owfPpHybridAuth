@@ -106,7 +106,7 @@ class hybridauth extends wf_agg {
 		);
 		
 		/* build configuration */
-		$this->config["base_url"] = $this->wf->linker("/hybridauth", true);
+		$this->config["base_url"] = $this->wf->linker("/hybridauth/", true);
 		$this->config["debug_mode"] = false;
 		$this->config["debug_file"] = "";
 		
@@ -127,6 +127,10 @@ class hybridauth extends wf_agg {
 					$this->config["providers"][$p]["display"] = $data["display"];
 			}
 		}
+		
+		$popup = $this->wf->get_var("popup");
+		if($popup && $popup == "false")
+			unset($this->providers["Facebook"]["display"]);
 		
 		/* load the library */
 		$this->lib_dir = dirname($this->wf->locate_file('deps/hybridauth/Hybrid/Auth.php'));
@@ -162,6 +166,8 @@ class hybridauth extends wf_agg {
 		if(!$api)
 			$api = $this->loadapi();
 		
+		$back = $this->wf->core_cipher()->get_var("back");
+		
 		/* load auth library */
 		try {
 			$this->hybridauth = new Hybrid_Auth($this->config);
@@ -170,7 +176,10 @@ class hybridauth extends wf_agg {
 			return $user_profile;
 		}
 		catch(Exception $e) {
-			$this->wf->display_login($e->getMessage());
+			if($back)
+				return $this->redirector($back);
+			else
+				$this->wf->display_login($e->getMessage());
 			exit(0);
 		}
 	}
