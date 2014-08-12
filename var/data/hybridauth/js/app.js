@@ -33,11 +33,16 @@
 	};
 	
 	/* constructor */
-	hybridauth.init = function(config, rootUrl, traductions) {
-		config = config;
-		root = rootUrl;
-		traductions = traductions;
-		
+	var config;
+	var root;
+	var traductions;
+	hybridauth.preInit = function(cfg, url, trads) {
+		config = cfg;
+		root = url;
+		traductions = trads;
+	};
+	
+	hybridauth.init = function() {
 		/* Facebook */
 		if(config.providers.Facebook && !config.providers.Facebook.noscript) {
 			hybridauth.fb = {};
@@ -95,6 +100,8 @@
 				}
 				
 			})(hybridauth.fb);
+			
+			hybridauth.fb.init(document, 'script', 'facebook-jssdk');
 		}
 		
 		/* Google */
@@ -158,10 +165,7 @@
 			//})(hybridauth.li);
 		//}
 		
-		$(document).ready(function() {
-			if(config.providers.Facebook && !config.providers.Facebook.noscript) {
-				hybridauth.fb.init(document, 'script', 'facebook-jssdk');
-			}
+		//$(document).ready(function() {
 			//if(config.providers.Google && !config.providers.Google.noscript) {
 				//hybridauth.gplus.init();
 				//onSignInCallback = hybridauth.gplus.onSignInCallback;
@@ -170,6 +174,6 @@
 				//hybridauth.li.init();
 				//onLinkedInLoad = hybridauth.li.onLoad;
 			//}
-		});
-	}
+		//});
+	};
 })(this);

@@ -219,7 +219,7 @@ class hybridauth extends wf_agg {
 		$traductions = json_encode($this->ts());
 		
 		$js =	'<script type="text/javascript" src="'.$this->wf->linker("/data/hybridauth/js/app.js").'"></script>'.
-				'<script type="text/javascript">hybridauth.init('.$config.', "'.$rootUrl.'", '.$traductions.');</script>';
+				'<script type="text/javascript">hybridauth.preInit('.$config.', "'.$rootUrl.'", '.$traductions.');</script>';
 				
 		return $js;
 	}
