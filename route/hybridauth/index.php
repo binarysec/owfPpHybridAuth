@@ -14,6 +14,7 @@ class wfr_ppHybridauth_hybridauth_index extends wf_route_request {
 	public function __construct($wf) {
 		$this->wf = $wf;
 		$this->hybrid = $this->wf->hybridauth();
+		$this->hybrid->initialize();
 	}
 	
 	public function index() {

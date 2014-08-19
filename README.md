@@ -38,7 +38,7 @@ $hybrid = $this->wf->hybridauth();
 $config = $hybrid->config;
 
 /* get the javascript running login buttons */
-$js = hybrid->get_login_tpl();
+$js = hybrid->get_javascript();
 
 /* make a template and add this */
 $tpl = new core_tpl($this->wf);

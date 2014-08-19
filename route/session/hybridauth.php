@@ -2,43 +2,37 @@
 
 class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * constructor
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
 	public function __construct($wf) {
 		$this->wf = $wf;
 		$this->a_session = $this->wf->session();
 		$this->lang = $this->wf->core_lang()->get_context("tpl/hybridauth/login");
+		
 		$this->hybrid = $this->wf->hybridauth();
+		$this->hybrid->initialize();
 		$this->ts();
 	}
 	
-	private function ts($text = "") {
-		$ret = array(
-			"API not supported" => $this->lang->ts("API not supported"),
-			"You don't have any email address associated with this account" => $this->lang->ts("You don't have any email address associated with this account"),
-			"Error creating your account" => $this->lang->ts("Error creating your account"),
-			"Authentication failed" => $this->lang->ts("Authentication failed"),
-		);
-		if(!$text)
-			return false;
-		return isset($ret[$text]) ? $ret[$text] : $this->lang->ts($text);
-	}
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Try to log in the user
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
 	public function login() {
 		
-		$back = $this->wf->core_cipher()->get_var("back");
-		
-		/* authenticate */
+		$back = $this->hybrid->get_back_url();
 		$user_profile = $this->hybrid->auth();
 		
-		/* get the user email */
 		$email = $user_profile->emailVerified;
-		if(!$email) {
+		if(!$email)
 			$email = $user_profile->email;
-		}
-		if(!$email) {
-			//$this->wf->display_error(500, $this->ts("You don't have any email address associated with this account"), true);
-			$this->wf->display_login($this->ts("You don't have any email address associated with this account"));
-			exit(0);
-		}
+		
+		if(!$email)
+			$this->hybrid->throw_error($this->ts("You don't have any email address associated with this account"));
 		
 		/* check if user exists */
 		$user = current($this->a_session->user->get(array("email" => $email)));
@@ -66,16 +60,32 @@ class wfr_ppHybridauth_session_hybridauth extends wf_route_request {
 		);
 		
 		/* save hybridauth session */
+		$this->a_session->check_session();
 		$this->hybrid->save();
 		
 		/* redirect */
 		$redirect_url = $this->wf->linker('/');
 		if(isset($uid))
-			// redirect url should be editable
 			$redirect_url = $this->wf->linker('/account/secure');
 		$redirect_url = $back ? $back : $redirect_url;
-		
 		$this->wf->redirector($redirect_url);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *
+	 * Utilities
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	private function ts($text = "") {
+		$ret = array(
+			"API not supported" => $this->lang->ts("API not supported"),
+			"You don't have any email address associated with this account" => $this->lang->ts("You don't have any email address associated with this account"),
+			"Error creating your account" => $this->lang->ts("Error creating your account"),
+			"Authentication failed" => $this->lang->ts("Authentication failed"),
+		);
+		if(!$text)
+			return false;
+		return isset($ret[$text]) ? $ret[$text] : $this->lang->ts($text);
 	}
 	
 }
