@@ -134,8 +134,10 @@ class hybridauth extends wf_agg {
 		}
 		
 		$popup = $this->wf->get_var("popup");
-		if($popup && $popup == "false")
+		if($popup && $popup == "false") {
 			unset($this->providers["Facebook"]["display"]);
+			unset($this->config["providers"]["Facebook"]["display"]);
+		}
 		
 		/* load the library */
 		$this->lib_dir = dirname($this->wf->locate_file('deps/hybridauth/Hybrid/Auth.php'));
