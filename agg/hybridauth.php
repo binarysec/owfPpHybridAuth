@@ -170,7 +170,10 @@ class hybridauth extends wf_agg {
 			Hybrid_Auth::initialize($this->config);
 		}
 		catch(Exception $e) {
-			$this->throw_error($e->getMessage());
+			$err = is_a($e, "wf_exception") ?
+				implode("<br/>", $e->load_message()) :
+				$e->getMessage();
+			$this->throw_error($err);
 		}
 	}
 	
