@@ -141,6 +141,10 @@ class hybridauth extends wf_agg {
 		
 		/* load the library */
 		$this->lib_dir = dirname($this->wf->locate_file('deps/hybridauth/Hybrid/Auth.php'));
+		
+		if(!$this->lib_dir)
+			throw new wf_exception("Submodule hybridauth is not ready");
+		
 		$this->require_lib("Auth.php");
 		$this->require_lib("thirdparty/OAuth/OAuth.php");
 		//$logger = "$dir/Logger.php";
