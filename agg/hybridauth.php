@@ -23,9 +23,9 @@ class hybridauth_dao extends core_dao_form_db {
 		return parent::remove($where);
 	}
 	
-	public function get($where = NULL, $order = NULL, $limit = -1, $offset = -1) {
+	public function get($where = NULL, $order = NULL, $limit = -1, $offset = -1, $fields = null) {
 		$where["user_id"] = intval($this->wf->session()->session_me["id"]);
-		return parent::get($where, $order, $limit, $offset);
+		return parent::get($where, $order, $limit, $offset, $fields);
 	}
 	
 }
